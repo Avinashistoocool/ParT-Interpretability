@@ -9,7 +9,7 @@
   "enable_tpu": false,
   "enable_internet": true,
   "keywords": [],
-  "dataset_sources": ["suryatrainer/jetclass-val"],
+  "dataset_sources": ["suryatrainer/jetclass-val", "avinashchandragupta/part-interp-bundle"],
   "kernel_sources": [],
   "competition_sources": [],
   "model_sources": []
