@@ -1,0 +1,14 @@
+checkpoints/*.pt
+data/
+__pycache__/
+*.pyc
+.pytest_cache/
+kaggle/_staged/
+kaggle/*/run.py
+results/kaggle_*/**/*.tgz
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.bbl
+paper/*.blg
+paper/*.pdf
