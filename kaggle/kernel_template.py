@@ -75,16 +75,30 @@ else:  # fallback: one test file per class straight from Zenodo
     sh(f"python {code}/scripts/fetch_jetclass_test.py --out {data_dir} --classes {CLASSES} --files_per_class 2")
 print("data_dir", data_dir, sorted(os.listdir(data_dir))[:12], flush=True)
 
-common = (f"--model {MODEL} --ckpt {ckpt} --data_dir {data_dir} --batch_size 256 --n_boot 300 "
-          f"--random_control --device cuda")
-# main sample: 20k jets per class (all 10 classes) from the first file of each class
-sh(f"python {code}/scripts/run_analysis.py {common} --classes {CLASSES} --n_per_class 20000 "
-   f"--n_attn_per_class 3000 --n_causal_per_class 3000 --n_probe_per_class 2000 --probe_max 80000 "
-   f"--out {WORK}/results/{MODEL}_main")
-# replica: independent jets (second file of each class), Hbb/QCD/Hcc/Tbqq only, different seed
-sh(f"python {code}/scripts/run_analysis.py {common} --classes QCD,Hbb,Hcc,Tbqq --file_index 1 "
-   f"--n_per_class 10000 --n_attn_per_class 3000 --n_causal_per_class 3000 --n_probe_per_class 2000 "
-   f"--probe_max 60000 --seed 1 --out {WORK}/results/{MODEL}_replica")
+import torch  # noqa: E402
+
+GPU = torch.cuda.is_available()
+print(f"torch {torch.__version__}, cuda available: {GPU}", flush=True)
+if not GPU:
+    print("[warn] no GPU in this session (GPU/internet need a phone-verified Kaggle account and the "
+          "accelerator enabled); running a reduced CPU configuration", flush=True)
+common = (f"--model {MODEL} --ckpt {ckpt} --data_dir {data_dir} --n_boot 300 --random_control "
+          f"--device {'cuda' if GPU else 'cpu'} --batch_size {256 if GPU else 64}")
+if GPU:
+    main_args = (f"--classes {CLASSES} --n_per_class 20000 --n_attn_per_class 3000 --n_causal_per_class 3000 "
+                 f"--n_probe_per_class 2000 --probe_max 80000")
+    rep_args = ("--classes QCD,Hbb,Hcc,Tbqq --n_per_class 10000 --n_attn_per_class 3000 --n_causal_per_class 3000 "
+                "--n_probe_per_class 2000 --probe_max 60000")
+else:
+    main_args = ("--classes QCD,Hbb,Hcc,Tbqq --n_per_class 5000 --n_attn_per_class 1500 --n_causal_per_class 1500 "
+                 "--n_probe_per_class 1000 --probe_max 30000")
+    rep_args = ("--classes QCD,Hbb --n_per_class 3000 --n_attn_per_class 1000 --n_causal_per_class 1000 "
+                "--n_probe_per_class 800 --probe_max 20000")
+# main sample from the first file of each class (*_120.root)
+sh(f"python {code}/scripts/run_analysis.py {common} {main_args} --out {WORK}/results/{MODEL}_main")
+# replica: independent jets (second file of each class), different seed
+sh(f"python {code}/scripts/run_analysis.py {common} {rep_args} --file_index 1 --seed 1 "
+   f"--out {WORK}/results/{MODEL}_replica")
 sh(f"cd {WORK} && python {code}/scripts/make_report.py results/{MODEL}_main results/{MODEL}_replica "
    f"--out results/REPORT_{MODEL}.md", check=False)
 sh(f"cd {WORK} && tar czf results_{MODEL}.tgz results && rm -rf repo jetclass_test {MODEL}.pt")

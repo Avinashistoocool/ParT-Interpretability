@@ -2,7 +2,7 @@
 #   powershell -ExecutionPolicy Bypass -File scripts\push_kaggle.ps1            # push all
 #   powershell -ExecutionPolicy Bypass -File scripts\push_kaggle.ps1 -Only part-interp-part
 # Username: $env:KAGGLE_USERNAME, else `kaggle config view`, else ~/.kaggle/kaggle.json.
-param([string]$Only = "", [switch]$DryRun)
+param([string]$Only = "", [switch]$DryRun, [switch]$UpdateBundle)
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $PSScriptRoot
 
@@ -17,6 +17,24 @@ if (-not $user) {
 }
 if (-not $user -or $user -eq "None") { throw "Kaggle username not found: set KAGGLE_USERNAME or run 'kaggle config set -n username -v <name>'" }
 Write-Host "Kaggle user: $user"
+
+# Kaggle sessions on unverified accounts have no internet, so the kernels read code, wheels and
+# checkpoints from the private dataset <user>/part-interp-bundle. -UpdateBundle refreshes its code.
+if ($UpdateBundle) {
+    $b = Join-Path $root "kaggle\_staged\bundle"
+    if (-not (Test-Path (Join-Path $b "dataset-metadata.json"))) { throw "bundle staging dir missing: $b (see README, Kaggle section)" }
+    Remove-Item -Recurse -Force (Join-Path $b "code") -ErrorAction SilentlyContinue
+    New-Item -ItemType Directory -Force (Join-Path $b "code") | Out-Null
+    Copy-Item -Recurse -Force (Join-Path $root "src"), (Join-Path $root "scripts") (Join-Path $b "code")
+    Get-ChildItem -Recurse (Join-Path $b "code") -Directory -Filter __pycache__ | Remove-Item -Recurse -Force
+    kaggle datasets version -p $b -m "code update" --dir-mode zip
+    if ($LASTEXITCODE -ne 0) { throw "bundle update failed" }
+    Write-Host "waiting for the bundle version to be ready..."
+    for ($i = 0; $i -lt 30; $i++) {
+        Start-Sleep 10
+        if ((kaggle datasets status "$user/part-interp-bundle") -match "ready") { break }
+    }
+}
 
 $template = Get-Content (Join-Path $root "kaggle\kernel_template.py") -Raw
 $kernels = @{ "part-interp-part" = "part"; "part-interp-gds" = "gds" }
