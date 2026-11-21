@@ -22,9 +22,31 @@ Here U holds the pairwise features (ln ΔR, ln kT, ln z, ln m²). The ψ(U) bias
 
 Uncertainties are 68% bootstrap intervals over **jets**. Particles inside a jet are correlated, so they are not resampled independently.
 
-## First results (local, preliminary)
+## Results (Kaggle, GPU, JetClass validation split)
 
-Local run: official `ParT_full` on JetClass **test** file `*_100.root`, 5 000 jets each of QCD, H→bb̄, H→cc̄, t→bqq', on an RTX 4050. The full report is [`results/REPORT_local.md`](results/REPORT_local.md), and the figures are in `results/local_*`. The numbers are filled in from that report in [docs/FINDINGS.md](docs/FINDINGS.md). They are a small-sample pilot. The Kaggle runs (20k jets/class, all 10 classes, plus an independent replica) are the ones to quote.
+**ParT runs:**
+
+- **Main run:** official `ParT_full`, 10 classes × 20k jets.
+- **Replica:** independent files, 4 classes × 10k jets, new seed.
+
+GDS-ParT was run with the same setup. Both ran on Tesla T4 GPUs. The full write-up, which separates robust results from null results, is in **[docs/FINDINGS.md](docs/FINDINGS.md)**. All tables are in [`results/REPORT_kaggle.md`](results/REPORT_kaggle.md).
+
+Robust findings for ParT, H→bb̄ vs QCD. Each reproduces in the replica within about 0.05; brackets are 68% jet-bootstrap intervals.
+
+1. **The classifier reads displaced tracks.**
+   - In H→bb̄ jets the CLS attention per displaced track (|d0|/σ > 3) is 1.65× [1.64, 1.66] its population share. In QCD it is 1.15×.
+   - In a within-jet regression, "is displaced" is the largest predictor of CLS attention (+0.57 ± 0.01).
+2. **Displacement is causally necessary and specific.** Removing displaced tracks as attention keys costs ΔAUC −0.024 [−0.026, −0.023], and R99 drops to 1/20. Removing the same number of pT-matched prompt tracks costs −0.0005.
+3. **The information stays on the displaced tokens.** Zeroing their impact parameters collapses log p(Hbb)/p(QCD) from 7.3 to 0.1. Restoring only the displaced tokens' residual stream at the CLS input recovers 80% of that gap.
+4. **ψ(U) dominates the attention logits, but QK groups displaced tracks.**
+   - The interaction bias ψ(U) accounts for 66–88% of attention-logit variance.
+   - The displaced→displaced ("secondary-vertex-like") attention is produced by the QK content term: enrichment 3.0 with QK alone vs 1.7 with ψ(U) alone; permutation null ≤ 1.6. The top head is L6.h4 at 3.35, and 3.31 in the replica.
+5. **The model builds neighbourhood features.** "A displaced track within ΔR < 0.4" becomes linearly decodable after one block: probe AUC 0.88–0.93, vs 0.74–0.77 for a random-init network.
+6. **GDS-ParT uses a different route.** It spreads displacement information to the other particles early: restoring only the other particles recovers 94% at the CLS input, vs 69% for ParT. It also relies more on ψ(U): removing it costs ΔAUC −0.036, vs −0.008 for ParT.
+
+**Null results:** no single head is necessary (|ΔAUC| ≤ 0.0002, the same as random heads), and the "top-5 heads" selection does not replicate.
+
+![causal](paper/figures/fig4_causal.png)
 
 ## Layout
 
@@ -36,7 +58,8 @@ kaggle/              kernel_template.py, part-interp-part/, part-interp-gds/ (ke
 tests/               CPU smoke tests (tiny random ParT / GDS-ParT on synthetic jets)
 paper/               LaTeX workshop-paper skeleton
 docs/PLAN.md         milestones toward ML4PS
-results/             local pilot results (json + figures)
+results/             Kaggle results (results.json, figures, logs) + REPORT_kaggle.md
+docs/FINDINGS.md     findings with uncertainties, robust vs null
 ```
 
 ## Usage

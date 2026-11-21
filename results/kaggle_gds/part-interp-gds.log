@@ -1,0 +1,53 @@
+[{"stream_name":"stdout","time":1.65846558,"data":"bundle /kaggle/input/part-interp-bundle\n"}
+,{"stream_name":"stdout","time":1.794709424,"data":"+ pip install -q --no-index --find-links /kaggle/input/part-interp-bundle/wheels uproot awkward\n"}
+,{"stream_name":"stdout","time":6.640904696,"data":"+ git clone -q --depth 1 https://github.com/Avinashistoocool/ParT-Interpretability.git /kaggle/working/repo\n"}
+,{"stream_name":"stdout","time":7.876560936,"data":"checkpoint /kaggle/input/part-interp-bundle/gds_v2_shared_10M_10ep.pt 33453357\n"}
+,{"stream_name":"stdout","time":7.884505647,"data":"data_dir /kaggle/input/datasets/suryatrainer/jetclass-val/val_data ['HToBB_120.root', 'HToBB_121.root', 'HToBB_122.root', 'HToBB_123.root', 'HToBB_124.root', 'HToCC_120.root', 'HToCC_121.root', 'HToCC_122.root', 'HToCC_123.root', 'HToCC_124.root', 'HToGG_120.root', 'HToGG_121.root']\n"}
+,{"stream_name":"stdout","time":13.812759084,"data":"torch 2.11.0+cu130, cuda available: True\n"}
+,{"stream_name":"stdout","time":13.812803086,"data":"+ python /kaggle/working/repo/scripts/run_analysis.py --model gds --ckpt /kaggle/input/part-interp-bundle/gds_v2_shared_10M_10ep.pt --data_dir /kaggle/input/datasets/suryatrainer/jetclass-val/val_data --n_boot 300 --random_control --device cuda --batch_size 256 --classes QCD,Hbb,Hcc,Hgg,H4q,Hqql,Zqq,Wqq,Tbqq,Tbl --n_per_class 20000 --n_attn_per_class 3000 --n_causal_per_class 3000 --n_probe_per_class 2000 --probe_max 80000 --out /kaggle/working/results/gds_main\n"}
+,{"stream_name":"stdout","time":18.639979565,"data":"[data] QCD   20000 jets from ZJetsToNuNu_120.root\n"}
+,{"stream_name":"stdout","time":21.25825384,"data":"[data] Hbb   20000 jets from HToBB_120.root\n"}
+,{"stream_name":"stdout","time":23.885674195,"data":"[data] Hcc   20000 jets from HToCC_120.root\n"}
+,{"stream_name":"stdout","time":26.461170166,"data":"[data] Hgg   20000 jets from HToGG_120.root\n"}
+,{"stream_name":"stdout","time":29.160626979,"data":"[data] H4q   20000 jets from HToWW4Q_120.root\n"}
+,{"stream_name":"stdout","time":31.751910533,"data":"[data] Hqql  20000 jets from HToWW2Q1L_120.root\n"}
+,{"stream_name":"stdout","time":34.530394016,"data":"[data] Zqq   20000 jets from ZToQQ_120.root\n"}
+,{"stream_name":"stdout","time":37.235780532,"data":"[data] Wqq   20000 jets from WToQQ_120.root\n"}
+,{"stream_name":"stdout","time":39.784891397,"data":"[data] Tbqq  20000 jets from TTBar_120.root\n"}
+,{"stream_name":"stdout","time":42.482309382,"data":"[data] Tbl   20000 jets from TTBarLep_120.root\n"}
+,{"stream_name":"stdout","time":148.794162684,"data":"[perf] {\"auc\": 0.99835563625, \"R50\": 10000.0, \"n_bkg_pass_50\": 2, \"R90\": 444.44444444444446, \"n_bkg_pass_90\": 45, \"R99\": 47.16981132075472, \"n_bkg_pass_99\": 424, \"n_sig\": 20000, \"n_bkg\": 20000} acc10=0.8483\n"}
+,{"stream_name":"stdout","time":286.52344781,"data":"[attn] done in 138s\n"}
+,{"stream_name":"stdout","time":2571.364149211,"data":"[ablation] done in 2285s\n"}
+,{"stream_name":"stdout","time":2722.375433636,"data":"[patching] done in 151s\n"}
+,{"stream_name":"stdout","time":2967.036911089,"data":"[probes] done in 245s\n"}
+,{"stream_name":"stdout","time":2970.025933673,"data":"[done] /kaggle/working/results/gds_main in 2955s\n"}
+,{"stream_name":"stdout","time":2972.602593199,"data":"+ python /kaggle/working/repo/scripts/run_analysis.py --model gds --ckpt /kaggle/input/part-interp-bundle/gds_v2_shared_10M_10ep.pt --data_dir /kaggle/input/datasets/suryatrainer/jetclass-val/val_data --n_boot 300 --random_control --device cuda --batch_size 256 --classes QCD,Hbb,Hcc,Tbqq --n_per_class 10000 --n_attn_per_class 3000 --n_causal_per_class 3000 --n_probe_per_class 2000 --probe_max 60000 --file_index 1 --seed 1 --out /kaggle/working/results/gds_replica\n"}
+,{"stream_name":"stdout","time":2976.653981533,"data":"[data] QCD   10000 jets from ZJetsToNuNu_121.root\n"}
+,{"stream_name":"stdout","time":2978.608806978,"data":"[data] Hbb   10000 jets from HToBB_121.root\n"}
+,{"stream_name":"stdout","time":2980.627019801,"data":"[data] Hcc   10000 jets from HToCC_121.root\n"}
+,{"stream_name":"stdout","time":2982.672872082,"data":"[data] Tbqq  10000 jets from TTBar_121.root\n"}
+,{"stream_name":"stdout","time":3007.838530931,"data":"[perf] {\"auc\": 0.99839288, \"R50\": 10000.0, \"n_bkg_pass_50\": 1, \"R90\": 357.14285714285717, \"n_bkg_pass_90\": 28, \"R99\": 39.0625, \"n_bkg_pass_99\": 256, \"n_sig\": 10000, \"n_bkg\": 10000} acc10=0.8649\n"}
+,{"stream_name":"stdout","time":3069.724135307,"data":"[attn] done in 62s\n"}
+,{"stream_name":"stdout","time":4016.727350073,"data":"[ablation] done in 947s\n"}
+,{"stream_name":"stdout","time":4168.196772806,"data":"[patching] done in 151s\n"}
+,{"stream_name":"stderr","time":4204.571828776,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/linear_model/_logistic.py:465: ConvergenceWarning: lbfgs failed to converge (status=1):\n"}
+,{"stream_name":"stderr","time":4204.571896311,"data":"STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT.\n"}
+,{"stream_name":"stderr","time":4204.571901181,"data":"\n"}
+,{"stream_name":"stderr","time":4204.571905305,"data":"Increase the number of iterations (max_iter) or scale the data as shown in:\n"}
+,{"stream_name":"stderr","time":4204.571909679,"data":"    https://scikit-learn.org/stable/modules/preprocessing.html\n"}
+,{"stream_name":"stderr","time":4204.571914401,"data":"Please also refer to the documentation for alternative solver options:\n"}
+,{"stream_name":"stderr","time":4204.571919625,"data":"    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression\n"}
+,{"stream_name":"stderr","time":4204.57192482,"data":"  n_iter_i = _check_optimize_result(\n"}
+,{"stream_name":"stdout","time":4353.00555951,"data":"[probes] done in 185s\n"}
+,{"stream_name":"stdout","time":4355.449365357,"data":"[done] /kaggle/working/results/gds_replica in 1381s\n"}
+,{"stream_name":"stdout","time":4356.318837981,"data":"+ cd /kaggle/working \u0026\u0026 python /kaggle/working/repo/scripts/make_report.py results/gds_main results/gds_replica --out results/REPORT_gds.md\n"}
+,{"stream_name":"stdout","time":4357.287138264,"data":"wrote results/REPORT_gds.md\n"}
+,{"stream_name":"stdout","time":4357.370579599,"data":"+ cd /kaggle/working \u0026\u0026 tar czf results_gds.tgz results \u0026\u0026 rm -rf repo jetclass_test gds.pt\n"}
+,{"stream_name":"stdout","time":4357.471068084,"data":"total 4357s\n"}
+,{"stream_name":"stderr","time":4359.915038055,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":4359.915063037,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":4360.147076489,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":4360.147098496,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":4360.896921453,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":4361.815582094,"data":"[NbConvertApp] Writing 294036 bytes to __results__.html\n"}
+]

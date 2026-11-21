@@ -11,9 +11,9 @@
 | # | milestone | status | exit criterion |
 |---|---|---|---|
 | M0 | Instrumented ParT/GDS-ParT, exactness tests | **done** | `pytest` passes; instrumented logits = original; qk+bias reconstructs logits |
-| M1 | Local pilot on 4×5k test jets (ParT_full + GDS-ParT) | **done** | `results/REPORT_local.md`, figures |
-| M2 | Kaggle main runs: 10 classes × 20k val jets, both models | pushed | `results_<model>.tgz` downloaded to `results/kaggle_*` |
-| M3 | Replica (independent files, new seed) agrees with M2 | pending | headline numbers inside each other's 68% CIs |
+| M1 | Local pilot (ParT_full + GDS-ParT) | partial | 16 GB laptop ran out of memory on ≥1.5k jets/class runs; superseded by M2 |
+| M2 | Kaggle main runs: 10 classes × 20k val jets, both models | **done** (T4 GPU) | `results/kaggle_*`, `results/REPORT_kaggle.md` |
+| M3 | Replica (independent files, new seed) agrees with M2 | **done** | see `docs/FINDINGS.md`; robust vs non-robust results separated |
 | M4 | Robustness: displacement threshold 2/3/5σ; the d0-only vs d0+dz corruption; mean- vs zero-ablation; ParT_kin (no d0 inputs) as a negative control, where displaced-track structure must vanish | todo | table in appendix |
 | M5 | Circuit write-up: trace top heads (L→C) for H→bb̄; attention-path / head-to-head patching | todo | 1 schematic figure |
 | M6 | Paper draft (4 pp) + internal review (Prof. Iyer) | todo | PDF |

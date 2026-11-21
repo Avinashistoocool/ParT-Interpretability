@@ -1,0 +1,45 @@
+[{"stream_name":"stdout","time":3.7531419120000002,"data":"bundle /kaggle/input/part-interp-bundle\n"}
+,{"stream_name":"stdout","time":4.439740725,"data":"+ pip install -q --no-index --find-links /kaggle/input/part-interp-bundle/wheels uproot awkward\n"}
+,{"stream_name":"stdout","time":12.316102143,"data":"+ git clone -q --depth 1 https://github.com/Avinashistoocool/ParT-Interpretability.git /kaggle/working/repo\n"}
+,{"stream_name":"stdout","time":14.027080874,"data":"checkpoint /kaggle/input/part-interp-bundle/ParT_full.pt 8655467\n"}
+,{"stream_name":"stdout","time":14.03181245,"data":"data_dir /kaggle/input/datasets/suryatrainer/jetclass-val/val_data ['HToBB_120.root', 'HToBB_121.root', 'HToBB_122.root', 'HToBB_123.root', 'HToBB_124.root', 'HToCC_120.root', 'HToCC_121.root', 'HToCC_122.root', 'HToCC_123.root', 'HToCC_124.root', 'HToGG_120.root', 'HToGG_121.root']\n"}
+,{"stream_name":"stdout","time":27.325706183,"data":"torch 2.11.0+cu130, cuda available: True\n"}
+,{"stream_name":"stdout","time":27.325745899,"data":"+ python /kaggle/working/repo/scripts/run_analysis.py --model part --ckpt /kaggle/input/part-interp-bundle/ParT_full.pt --data_dir /kaggle/input/datasets/suryatrainer/jetclass-val/val_data --n_boot 300 --random_control --device cuda --batch_size 256 --classes QCD,Hbb,Hcc,Hgg,H4q,Hqql,Zqq,Wqq,Tbqq,Tbl --n_per_class 20000 --n_attn_per_class 3000 --n_causal_per_class 3000 --n_probe_per_class 2000 --probe_max 80000 --out /kaggle/working/results/part_main\n"}
+,{"stream_name":"stdout","time":32.919080204,"data":"[data] QCD   20000 jets from ZJetsToNuNu_120.root\n"}
+,{"stream_name":"stdout","time":35.902005095,"data":"[data] Hbb   20000 jets from HToBB_120.root\n"}
+,{"stream_name":"stdout","time":38.86548668,"data":"[data] Hcc   20000 jets from HToCC_120.root\n"}
+,{"stream_name":"stdout","time":42.009497099,"data":"[data] Hgg   20000 jets from HToGG_120.root\n"}
+,{"stream_name":"stdout","time":45.219518739,"data":"[data] H4q   20000 jets from HToWW4Q_120.root\n"}
+,{"stream_name":"stdout","time":48.076810754,"data":"[data] Hqql  20000 jets from HToWW2Q1L_120.root\n"}
+,{"stream_name":"stdout","time":51.248248654,"data":"[data] Zqq   20000 jets from ZToQQ_120.root\n"}
+,{"stream_name":"stdout","time":54.141933688,"data":"[data] Wqq   20000 jets from WToQQ_120.root\n"}
+,{"stream_name":"stdout","time":56.957939443,"data":"[data] Tbqq  20000 jets from TTBar_120.root\n"}
+,{"stream_name":"stdout","time":59.883197996,"data":"[data] Tbl   20000 jets from TTBarLep_120.root\n"}
+,{"stream_name":"stdout","time":170.13299313,"data":"[perf] {\"auc\": 0.999028135, \"R50\": 10000.0, \"n_bkg_pass_50\": 2, \"R90\": 689.6551724137931, \"n_bkg_pass_90\": 29, \"R99\": 62.11180124223603, \"n_bkg_pass_99\": 322, \"n_sig\": 20000, \"n_bkg\": 20000} acc10=0.8605\n"}
+,{"stream_name":"stdout","time":312.302803698,"data":"[attn] done in 142s\n"}
+,{"stream_name":"stdout","time":2495.147717255,"data":"[ablation] done in 2183s\n"}
+,{"stream_name":"stdout","time":2632.958485625,"data":"[patching] done in 138s\n"}
+,{"stream_name":"stdout","time":2827.63555077,"data":"[probes] done in 195s\n"}
+,{"stream_name":"stdout","time":2831.306493662,"data":"[done] /kaggle/working/results/part_main in 2802s\n"}
+,{"stream_name":"stdout","time":2840.596904929,"data":"+ python /kaggle/working/repo/scripts/run_analysis.py --model part --ckpt /kaggle/input/part-interp-bundle/ParT_full.pt --data_dir /kaggle/input/datasets/suryatrainer/jetclass-val/val_data --n_boot 300 --random_control --device cuda --batch_size 256 --classes QCD,Hbb,Hcc,Tbqq --n_per_class 10000 --n_attn_per_class 3000 --n_causal_per_class 3000 --n_probe_per_class 2000 --probe_max 60000 --file_index 1 --seed 1 --out /kaggle/working/results/part_replica\n"}
+,{"stream_name":"stdout","time":2844.346454729,"data":"[data] QCD   10000 jets from ZJetsToNuNu_121.root\n"}
+,{"stream_name":"stdout","time":2846.370224042,"data":"[data] Hbb   10000 jets from HToBB_121.root\n"}
+,{"stream_name":"stdout","time":2848.197685117,"data":"[data] Hcc   10000 jets from HToCC_121.root\n"}
+,{"stream_name":"stdout","time":2850.231196766,"data":"[data] Tbqq  10000 jets from TTBar_121.root\n"}
+,{"stream_name":"stdout","time":2873.666933757,"data":"[perf] {\"auc\": 0.99904495, \"R50\": 10000.0, \"n_bkg_pass_50\": 0, \"R90\": 555.5555555555555, \"n_bkg_pass_90\": 18, \"R99\": 56.81818181818182, \"n_bkg_pass_99\": 176, \"n_sig\": 10000, \"n_bkg\": 10000} acc10=0.8769\n"}
+,{"stream_name":"stdout","time":2937.022301046,"data":"[attn] done in 63s\n"}
+,{"stream_name":"stdout","time":3838.862068847,"data":"[ablation] done in 902s\n"}
+,{"stream_name":"stdout","time":3977.769751194,"data":"[patching] done in 139s\n"}
+,{"stream_name":"stdout","time":4126.14841773,"data":"[probes] done in 148s\n"}
+,{"stream_name":"stdout","time":4128.781739789,"data":"[done] /kaggle/working/results/part_replica in 1286s\n"}
+,{"stream_name":"stdout","time":4129.765929996,"data":"+ cd /kaggle/working \u0026\u0026 python /kaggle/working/repo/scripts/make_report.py results/part_main results/part_replica --out results/REPORT_part.md\n"}
+,{"stream_name":"stdout","time":4130.796748236,"data":"wrote results/REPORT_part.md\n"}
+,{"stream_name":"stdout","time":4130.906006769,"data":"+ cd /kaggle/working \u0026\u0026 tar czf results_part.tgz results \u0026\u0026 rm -rf repo jetclass_test part.pt\n"}
+,{"stream_name":"stdout","time":4131.057448053,"data":"total 4129s\n"}
+,{"stream_name":"stderr","time":4134.252745957,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":4134.252783237,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":4134.754982593,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":4134.755009092,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":4135.799721786,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":4137.297886376,"data":"[NbConvertApp] Writing 294037 bytes to __results__.html\n"}
+]

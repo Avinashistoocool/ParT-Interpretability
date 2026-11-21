@@ -1,0 +1,27 @@
+{
+ "args": {
+  "model": "gds",
+  "ckpt": "/kaggle/input/part-interp-bundle/gds_v2_shared_10M_10ep.pt",
+  "data_dir": "/kaggle/input/datasets/suryatrainer/jetclass-val/val_data",
+  "classes": "QCD,Hbb,Hcc,Hgg,H4q,Hqql,Zqq,Wqq,Tbqq,Tbl",
+  "n_per_class": 20000,
+  "start": 0,
+  "file_index": 0,
+  "n_attn_per_class": 3000,
+  "n_causal_per_class": 3000,
+  "n_probe_per_class": 2000,
+  "probe_max": 80000,
+  "n_boot": 300,
+  "batch_size": 256,
+  "signal": "Hbb",
+  "background": "QCD",
+  "random_control": true,
+  "quick": false,
+  "out": "/kaggle/working/results/gds_main",
+  "device": "cuda",
+  "seed": 0
+ },
+ "total_seconds": 2954.6493594646454,
+ "torch": "2.11.0+cu130",
+ "device_name": "Tesla T4"
+}
