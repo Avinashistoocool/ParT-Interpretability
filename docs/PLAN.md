@@ -14,7 +14,7 @@
 | M1 | Local pilot (ParT_full + GDS-ParT) | partial | 16 GB laptop ran out of memory on ≥1.5k jets/class runs; superseded by M2 |
 | M2 | Kaggle main runs: 10 classes × 20k val jets, both models | **done** (T4 GPU) | `results/kaggle_*`, `results/REPORT_kaggle.md` |
 | M3 | Replica (independent files, new seed) agrees with M2 | **done** | see `docs/FINDINGS.md`; robust vs non-robust results separated |
-| M4 | Robustness: displacement threshold 2/3/5σ; the d0-only vs d0+dz corruption; mean- vs zero-ablation; ParT_kin (no d0 inputs) as a negative control, where displaced-track structure must vanish | todo | table in appendix |
+| M4 | Robustness: displacement threshold 2/3/5σ; d0-only vs d0+dz corruption; prompt-mean vs zero corruption; ParT_kin (no impact-parameter inputs) negative control | **partial** (300/class overlapping validation subset) | [`results/robustness_val/REPORT.md`](../results/robustness_val/REPORT.md); independent-file replication, dz-only and resampled prompt corruption remain |
 | M5 | Circuit write-up: trace top heads (L→C) for H→bb̄; attention-path / head-to-head patching | todo | 1 schematic figure |
 | M6 | Paper draft (4 pp) + internal review (Prof. Iyer) | todo | PDF |
 | M7 | arXiv submission; code tag + Zenodo DOI | todo | arXiv ID |

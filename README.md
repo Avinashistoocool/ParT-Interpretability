@@ -75,7 +75,22 @@ python scripts/fetch_jetclass_test.py --out data/JetClass/test --classes QCD,Hbb
 python scripts/run_analysis.py --model part --ckpt checkpoints/ParT_full.pt --data_dir data/JetClass/test `
     --classes QCD,Hbb,Hcc,Tbqq --n_per_class 5000 --random_control --out results/local_part
 python scripts/make_report.py results/local_part results/local_gds --out results/REPORT_local.md
+
+# focused controls on the validation split (requires both official checkpoints)
+curl.exe -L -o checkpoints/ParT_kin.pt https://raw.githubusercontent.com/jet-universe/particle_transformer/main/models/ParT_kin.pt
+python scripts/run_robustness.py --ckpt checkpoints/ParT_full.pt --kin_ckpt checkpoints/ParT_kin.pt `
+    --data_dir data/JetClass/val --n_per_class 300 --out results/robustness_val
 ```
+
+The focused control script uses the same QCD/Hbb jets and seeds for thresholds
+2/3/5, compares displaced-key knockout with pT-matched prompt-key knockout,
+compares zero-d0, zero-d0-and-dz, and per-jet prompt-mean replacement, and
+repeats attention/knockout measurements with the official seven-input
+`ParT_kin` model. Its JSON records bootstrap intervals and the number of jets
+left unchanged when a prompt-mean reference does not exist. Kinematics-only
+does not accept impact-parameter features, so it has no corruption result.
+These controls use a smaller sample, but the first 300 jets in `*_120.root`
+overlap the Kaggle main sample; they are not an independent replication.
 
 ### Kaggle (heavy runs)
 

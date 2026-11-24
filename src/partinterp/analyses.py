@@ -103,14 +103,14 @@ def safe_logit(p):
 # ----------------------------------------------------------------------------
 # per-particle physics
 # ----------------------------------------------------------------------------
-def particle_physics(store, idx, P):
+def particle_physics(store, idx, P, sig_cut=SIG_CUT):
     r = {k: v[idx, :P] for k, v in store.raw.items() if v.ndim == 2}
     mask = store.mask[idx, :P]
     charged = (r["charge"] != 0) & mask
     with np.errstate(divide="ignore", invalid="ignore"):
         sig = np.where(charged & (r["d0err"] > 0), np.abs(r["d0"]) / r["d0err"], 0.0)
     pid = r["pid"]
-    displaced = charged & (sig > SIG_CUT)
+    displaced = charged & (sig > sig_cut)
     lepton = mask & ((pid == 3) | (pid == 4))
     neutral = mask & ((pid == 1) | (pid == 2))
     pt = np.where(mask, r["pt"], 0.0)
@@ -181,7 +181,7 @@ def performance(probs, labels, pairs):
 # analyses 1-3: one recording pass
 # ----------------------------------------------------------------------------
 @torch.no_grad()
-def recording_pass(ad, store, idx, device, bs=48, max_pairs=150000, rng=None):
+def recording_pass(ad, store, idx, device, bs=48, max_pairs=150000, rng=None, sig_cut=SIG_CUT):
     rng = rng or np.random.default_rng(0)
     L, H = len(PARTICLE_LAYERS), 8
     acc = {k: np.zeros((L, H)) for k in ["vqk", "vb", "cov", "tv_noBias", "tv_noQK", "nrows",
@@ -196,7 +196,7 @@ def recording_pass(ad, store, idx, device, bs=48, max_pairs=150000, rng=None):
         f, v, mk = ad.inputs(store, b, P, device)
         ctrl = Ctrl(record={"qk", "bias", "attn"})
         ad.forward(f, v, mk, ctrl)
-        ph = particle_physics(store, b, P)
+        ph = particle_physics(store, b, P, sig_cut=sig_cut)
         B = len(b)
         mkf = mk.float()
         n = mkf.sum(1)

@@ -210,6 +210,23 @@ def load_part(path, device="cpu"):
     return ParTAdapter(model.to(device))
 
 
+class ParTKinAdapter(ParTAdapter):
+    """Official ParT_kin: only the seven kinematic features from JetClass_kin.yaml."""
+
+    @staticmethod
+    def inputs(store, idx, P, device):
+        f, v, mk = ParTAdapter.inputs(store, idx, P, device)
+        return f[:, [0, 1, 2, 3, 4, 15, 16]], v, mk
+
+
+def load_part_kin(path, device="cpu"):
+    sd = torch.load(path, map_location="cpu", weights_only=True)
+    sd = {k[len("mod."):]: v for k, v in sd.items() if k.startswith("mod.")}
+    model = build_part(input_dim=7)
+    model.load_state_dict(sd)
+    return ParTKinAdapter(model.to(device))
+
+
 # ----------------------------------------------------------------------------
 # GDS-ParT
 # ----------------------------------------------------------------------------

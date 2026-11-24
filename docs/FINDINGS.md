@@ -44,7 +44,7 @@ The table gives CLS attention share divided by population share (1 = no preferen
 - The coefficient on log(1+|d0|/σ) is negative (−0.34) once the indicator is included. Attention behaves like a **threshold** ("is displaced") rather than growing with significance.
 - Leptons are read even more strongly, up to 9.2× in C1 for H→WW→qqℓν. This is expected, but it is the largest single preference.
 
-### F2. Displaced-track information is causally necessary, and the effect is specific to displacement
+### F2. Displaced-labelled attention keys affect performance more than matched prompt keys
 
 Attention knockout removes particles as attention keys in every layer, ParT main / replica:
 
@@ -56,6 +56,7 @@ Attention knockout removes particles as attention keys in every layer, ParT main
 
 - The displaced-track knockout is **≈40× more damaging** than the pT-matched prompt control. For H→bb̄ it shifts the mean signal logit by −7.4, and R99 falls to about 1/20 of its value.
 - Knocking out displaced tracks only in the two CLS blocks has a much smaller effect: ΔAUC −0.0006 (control 0.0000 / −0.0002). Most of the information is routed through the particle layers before the CLS reads it.
+- The later `ParT_kin` negative control also loses AUC when these keys are removed, despite having no d0/dz inputs. This knockout cannot by itself isolate the contribution of impact-parameter information.
 
 ### F3. In ParT the displacement information stays on the displaced tokens
 
@@ -90,7 +91,10 @@ The bias effect is distributed across layers and redundant.
 | QK only | 3.02 |
 | ψ(U) only | 1.70 (about the null level; partly geometric, since b-decay tracks are collimated) |
 
-So the **content term**, which can see d0, builds the displaced-track grouping, not the kinematic bias. This is expected because ψ(U) has no impact-parameter input, but it is now measured.
+Thus QK accounts for the head's observed grouping more than the kinematic
+bias does. QK can read d0/dz, but this decomposition does **not** show that
+the head uses those inputs: the later kinematics-only negative control still
+shows some displaced-labelled grouping in other heads.
 
 **Pairwise kinematics.** Many heads are strongly ordered by pairwise kinematics: Spearman ρ(attention, ln m²) = −0.82 for L0.h4, and ρ(attention, ln kT) = −0.79. Correlation with ln z is weak everywhere (|ρ| ≤ 0.19). Head-level kinematic correlations weaken with depth (layer-mean |ρ| 0.55 → 0.35).
 
@@ -136,12 +140,36 @@ Every number in this table reproduces in the GDS replica within 0.01.
 - **Per-layer ψ(U) removal** effects (≤ 0.0004 ΔAUC) are mostly within about 2σ of zero and change ordering between main and replica.
 - **The location of the maximum displaced→displaced head depends on class.** In QCD, H→cc̄ and top jets the maximum is L2.h4 (enrichment 4–6, with only ≈1 100 QCD jets having ≥ 2 displaced tracks). In H→bb̄ it is L6.h4. L2.h4 is high in every class, so it looks like a generic "charged, collinear" head, not a b-specific one. Treat "L6.h4 is the b-tagging head" as a hypothesis.
 - **R50 ratios** are uninformative because of saturation (see the sanity check above).
-- **The bootstrap intervals are very narrow**, often ±0.01. They only cover jet-sampling noise. Systematic variations (σ threshold, corruption type, mean- vs zero-ablation, a second training seed) have **not** been run yet; see `docs/PLAN.md` M4.
+- **The bootstrap intervals are very narrow**, often ±0.01. They only cover jet-sampling noise. Some threshold and corruption variations have now been run on a small, overlapping subset; independent-file confirmation, prompt-resampled corruption, and another training seed remain outstanding (see M4 in `docs/PLAN.md`).
+
+## Focused robustness controls (300 Hbb + 300 QCD validation jets)
+
+The measured [control report](../results/robustness_val/REPORT.md) and
+[JSON](../results/robustness_val/results.json) use the first 300 jets in
+each `*_120.root` file, which **overlap the main run**. They are not another
+independent replica. At displaced-track thresholds >2, >3, and >5, the
+ParT_full displaced-key knockouts change Hbb-vs-QCD AUC by -0.0252, -0.0208,
+and -0.0113; pT-matched prompt-key knockouts change it by 0.0000, -0.0002,
+and -0.0001. At fixed L6.h4, full displaced-to-displaced enrichment is
+3.10, 3.40, and 3.46, with QK-only enrichment 2.92, 3.16, and 3.16.
+These are threshold-sensitivity checks, not held-out head selection.
+
+The official `ParT_kin` model does not read d0/dz yet displaced-key
+knockout also changes its AUC by -0.0374, -0.0311, and -0.0241. Its
+L6.h4 pattern is absent (enrichment ~0.2), while another head reaches
+2.36 at >3 and CLS C1 enrichment reaches 1.47. Thus the baseline's
+displaced-key effect **cannot be attributed uniquely to impact parameters**,
+and attention enrichment alone does not establish a secondary-vertex
+representation. Qualify F2/F4 accordingly. On ParT_full at >3, d0-only
+zeroing changes AUC by -0.0025, zeroing both d0/dz by -0.0235, and
+per-jet prompt-mean replacement of both by -0.0210. These interventions
+do not isolate dz or establish that replacements are in-distribution.
+All control intervals are 68% jet-bootstrap intervals (100 resamples);
+sample overlap and choice of corruption are not included.
 
 ## Next checks
 
 1. Select heads on the main sample and score them on the replica, for the head ablation and the circuit claim.
-2. Use `ParT_kin` (no d0 inputs) as a negative control. The displaced-track effects in F2–F5 should vanish.
-3. Vary the threshold: |d0|/σ > 2 and > 5.
-4. Run a d0-only corruption, and a corruption that replaces d0 by values resampled from prompt tracks, so the corrupted input stays on-distribution.
+2. Replicate threshold and `ParT_kin` controls on non-overlapping validation files; interpret the non-vanishing negative-control knockouts.
+3. Run dz-only corruption and resample impact parameters from comparable prompt tracks; compare kinematic-matched interventions before attributing the effect to displacement.
 5. Do path patching from L6.h4 / L2.h4 into C0.7 / C0.1 to test a two-step circuit.
